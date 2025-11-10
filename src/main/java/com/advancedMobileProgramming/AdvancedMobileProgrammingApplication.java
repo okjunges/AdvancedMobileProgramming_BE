@@ -1,4 +1,4 @@
-package com.AdvancedMobileProgramming;
+package com.advancedMobileProgramming;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
