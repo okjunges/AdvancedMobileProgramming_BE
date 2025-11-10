@@ -1,5 +1,6 @@
 package com.advancedMobileProgramming.global.util.security;
 
+import com.advancedMobileProgramming.global.util.jtw.InMemoryTokenBlacklist;
 import com.advancedMobileProgramming.global.util.jtw.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -30,6 +31,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwt;
+    private final InMemoryTokenBlacklist blacklist;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
@@ -39,10 +41,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (auth != null && auth.startsWith("Bearer ")) {
             String token = auth.substring(7);
             try {
+                // 블랙리스트 먼저 확인
+                if (blacklist.isBlacklisted(token)) {
+                    SecurityContextHolder.clearContext();
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+
                 Jws<Claims> jws = jwt.parse(token);
 
                 Long userId = Long.valueOf(jws.getBody().getSubject());
-                String role = (String) jws.getBody().get("role"); // 토큰에 role 넣으셨죠
+                String role = (String) jws.getBody().get("role");
 
                 // 1) 이후 컨트롤러에서 @RequestAttribute 쓰려면 계속 세팅
                 req.setAttribute("userId", userId);

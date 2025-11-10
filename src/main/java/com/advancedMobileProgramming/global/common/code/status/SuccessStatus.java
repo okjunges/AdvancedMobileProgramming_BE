@@ -16,11 +16,7 @@ public enum SuccessStatus implements BaseCode {
     USER_REGISTER_LOCAL_SUCCESS(HttpStatus.OK, "USER_300", "로컬 회원가입 성공했습니다."),
     USER_PROFILE_SUCCESS(HttpStatus.OK, "USER_301", "로그인한 유저 조회 성공했습니다."),
     USER_LOGIN_LOCAL_SUCCESS(HttpStatus.OK, "USER_302", "로컬 로그인 성공했습니다."),
-
-
-    // token
-    //TOKEN_REISSUE_SUCCESS(HttpStatus.OK, "TOKEN_200", "토큰이 정상적으로 재발급되었습니다.")
-
+    USER_LOGOUT_SUCCESS(HttpStatus.OK, "USER_303", "로그아웃 성공했습니다.")
     ;
 
     private final HttpStatus httpStatus;

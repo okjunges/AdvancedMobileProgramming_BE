@@ -30,14 +30,14 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createAccessToken(Long userId, String email, String role) {
+    public String createAccessToken(Long userId, String studentNum, String role) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(expMin * 60);
 
         // 0.12.x 권장: subject()/issuedAt()/expiration()/claim()
         return Jwts.builder()
                 .subject(String.valueOf(userId))
-                .claim("email", email)
+                .claim("studentNumber", studentNum)
                 .claim("role", role)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
@@ -56,5 +56,10 @@ public class JwtTokenProvider {
 
     public Long getUserId(String token) {
         return Long.valueOf(parse(token).getPayload().getSubject());
+    }
+
+    /** 토큰 만료 시각 추출 */
+    public Instant getExpiration(String token) {
+        return parse(token).getPayload().getExpiration().toInstant();
     }
 }
