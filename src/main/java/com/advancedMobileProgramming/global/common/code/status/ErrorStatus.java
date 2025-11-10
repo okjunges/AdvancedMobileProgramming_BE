@@ -18,11 +18,10 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
 
-
-
     // --- USER ---
-    USER_EMAIL_ALREADY_USED(HttpStatus.BAD_REQUEST, "USER_400", "이미 가입된 이메일입니다"),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "유저를 찾을 수 없습니다."),
+    STUDENT_NUMBER_ALREADY_USED(HttpStatus.BAD_REQUEST, "USER_400", "이미 가입된 학번입니다."),
+    USER_WRONG_PASSWORD(HttpStatus.NOT_FOUND, "USER_403", "비밀번호를 틀렸습니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다.")
 
 
     ;
