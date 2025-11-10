@@ -16,10 +16,10 @@ public class SwaggerConfig {
     public OpenAPI openAPI(){
         // API 기본 설정
         Info info = new Info()
-                .title("rightMark API Document")
+                .title("Advanced Mobile Programming API Document")
                 .version("1.0")
                 .description(
-                        "환영합니다! [rightMark]는 공모 기반 창작 아이디어 디지털 증명 플랫폼입니다.\n"
+                        "환영합니다! 고급모바일프로그래밍 수업에서 진행한 프로젝트\n실시간 기자재 인식 및 정보 제공 기능을 통한 기자재 관리 시스템 서비스입니다\n"
                 );
 
         // JWT 인증 방식 설정
