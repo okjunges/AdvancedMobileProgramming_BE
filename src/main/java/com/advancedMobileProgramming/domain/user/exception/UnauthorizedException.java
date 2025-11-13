@@ -5,6 +5,6 @@ import com.advancedMobileProgramming.global.exception.GeneralException;
 
 public class UnauthorizedException extends GeneralException {
     public UnauthorizedException() {
-        super(ErrorStatus.STUDENT_NUMBER_ALREADY_USED);
+        super(ErrorStatus.USER_UNAUTHORIZED);
     }
 }

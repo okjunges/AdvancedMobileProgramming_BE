@@ -21,8 +21,8 @@ public enum ErrorStatus implements BaseErrorCode {
     // --- USER ---
     STUDENT_NUMBER_ALREADY_USED(HttpStatus.BAD_REQUEST, "USER_400", "이미 가입된 학번입니다."),
     USER_WRONG_PASSWORD(HttpStatus.NOT_FOUND, "USER_403", "비밀번호를 틀렸습니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다.")
-
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_404", "사용자를 찾을 수 없습니다."),
+    USER_UNAUTHORIZED(HttpStatus.NOT_FOUND, "USER_501", "사용자 인증 토근이 없습니다.")
 
     ;
 
