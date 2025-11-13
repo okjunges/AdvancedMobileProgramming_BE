@@ -15,9 +15,10 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserDtos.LoginResponseDto toLoginResponseDto(User user, String accessToken) {
+    public static UserDtos.LoginResponseDto toLoginResponseDto(User user, String accessToken, String refreshToken) {
         return UserDtos.LoginResponseDto.builder()
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .tokenType("Bearer")
                 .me(toProfileResponse(user))
                 .build();
