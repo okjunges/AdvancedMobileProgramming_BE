@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface EquipmentService {
-    EquipmentDtos.EquipmentAddResponseDto addEquipment(Long userId, EquipmentDtos.EquipmentAddRequestDto req, MultipartFile mainImage, List<MultipartFile> images) throws IOException;
+    EquipmentDtos.EquipmentResponseDto addEquipment(Long userId, EquipmentDtos.EquipmentAddRequestDto req, MultipartFile mainImage, List<MultipartFile> images) throws IOException;
     void addEquipmentImage(Long userId, String visionCode, List<MultipartFile> images) throws IOException;
+    EquipmentDtos.EquipmentResponseDto modifyEquipment(Long userId, Long equipmentId, EquipmentDtos.EquipmentModifyRequestDto req);
+    void deleteEquipment(Long userId, Long equipmentId);
 }

@@ -5,8 +5,8 @@ import com.advancedMobileProgramming.domain.equipment.entity.Equipment;
 
 public class EquipmentConverter {
 
-    public static EquipmentDtos.EquipmentAddResponseDto toEquipmentAddResponseDto(Equipment equipment) {
-        return EquipmentDtos.EquipmentAddResponseDto.builder()
+    public static EquipmentDtos.EquipmentResponseDto toEquipmentAddResponseDto(Equipment equipment) {
+        return EquipmentDtos.EquipmentResponseDto.builder()
                 .modelName(equipment.getModelName())
                 .name(equipment.getName())
                 .categoryName(equipment.getCategory().getName())

@@ -4,13 +4,10 @@ import com.advancedMobileProgramming.domain.equipment.application.EquipmentServi
 import com.advancedMobileProgramming.domain.equipment.dto.EquipmentDtos;
 import com.advancedMobileProgramming.global.common.code.status.SuccessStatus;
 import com.advancedMobileProgramming.global.common.response.BaseResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,11 +22,11 @@ public class EquipmentRestController {
 
     // 기자재 등록
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public BaseResponse<EquipmentDtos.EquipmentAddResponseDto> addEquipment(@AuthenticationPrincipal Long userId,
-                                                                            @RequestPart("metadata") @Valid EquipmentDtos.EquipmentAddRequestDto req,
-                                                                            @RequestPart("mainImage") MultipartFile mainImage,
-                                                                            @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
-        EquipmentDtos.EquipmentAddResponseDto result = equipmentService.addEquipment(userId, req, mainImage, images);
+    public BaseResponse<EquipmentDtos.EquipmentResponseDto> addEquipment(@AuthenticationPrincipal Long userId,
+                                                                         @RequestPart("metadata") @Valid EquipmentDtos.EquipmentAddRequestDto req,
+                                                                         @RequestPart("mainImage") MultipartFile mainImage,
+                                                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+        EquipmentDtos.EquipmentResponseDto result = equipmentService.addEquipment(userId, req, mainImage, images);
         return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_ADD_SUCCESS, result);
     }
 
@@ -39,5 +36,21 @@ public class EquipmentRestController {
                                                 @RequestPart("images") List<MultipartFile> images) throws IOException {
         equipmentService.addEquipmentImage(userId, visionCode, images);
         return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_ADD_IMAGE_SUCCESS, null);
+    }
+
+    // 기자재 DB 수정
+    @PatchMapping("/{equipment_id}")
+    public BaseResponse<EquipmentDtos.EquipmentResponseDto> modifyEquipment(@AuthenticationPrincipal Long userId,
+                                                                            @PathVariable("equipment_id") Long equipmentId,
+                                                                            @RequestBody @Valid EquipmentDtos.EquipmentModifyRequestDto req) {
+        EquipmentDtos.EquipmentResponseDto result = equipmentService.modifyEquipment(userId, equipmentId, req);
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_MODIFY_SUCCESS, result);
+    }
+
+    @DeleteMapping("/{equipment_id}")
+    public BaseResponse<Void> deleteEquipment(@AuthenticationPrincipal Long userId,
+                                              @PathVariable("equipment_id") Long equipmentId) {
+        equipmentService.deleteEquipment(userId, equipmentId);
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_DELETE_SUCCESS, null);
     }
 }
