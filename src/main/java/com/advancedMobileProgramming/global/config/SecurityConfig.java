@@ -33,7 +33,7 @@ public class SecurityConfig {
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 미사용
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/user/register", "/api/user/login",
+                                "/api/user/register", "/api/user/login", "/static/**",
                                 "/swagger-ui/**", "/v3/api-docs/**" // swagger 요청 허용
                         ).permitAll()
                         .anyRequest().authenticated()

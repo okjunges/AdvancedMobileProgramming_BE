@@ -11,6 +11,7 @@ import java.util.List;
 // React, Vite 연동 허용
 @Configuration
 public class CorsConfig {
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
