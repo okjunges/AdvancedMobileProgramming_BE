@@ -43,6 +43,21 @@ dependencies {
 
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14'
+
+	// Google Cloud 전체 버전 통합
+	implementation platform('com.google.cloud:libraries-bom:26.49.0')
+
+	// Vision Product Search
+	implementation "com.google.cloud:google-cloud-vision"
+
+	// Vision AI Warehouse
+	implementation 'com.google.cloud:google-cloud-visionai'
+
+	// Storage (GCS)
+	implementation 'com.google.cloud:google-cloud-storage'
+
+	// Vertex AI Vision
+	implementation 'com.google.cloud:google-cloud-aiplatform'
 }
 
 tasks.named('test') {

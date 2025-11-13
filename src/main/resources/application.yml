@@ -1,8 +1,16 @@
 # 로컬용 application.yml
 
 spring:
+  profiles:
+    active: local
+
+# ========== local ==========
+---
+spring:
   # .env 파일 인식하게끔
   config:
+    activate:
+      on-profile: local
     import: optional:file:.env[.properties]
   # mysql
   datasource:
@@ -35,3 +43,22 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+# file-storage
+storage:
+  local:
+    base-dir: equipment/uploads
+
+app:
+  public-base-url: http://localhost:8080
+
+# Google Cloud Vision
+vision:
+  role: ${VISION_ROLE}
+  project-id: ${VISION_PROJECT_ID}
+  location: ${VISION_LOCATION}
+  project-number: ${VISION_PROJECT_NUMBER}
+  corpus-id: ${VISION_CORPUS_ID}
+  index-endpoint-id: ${VISION_INDEX_ENDPOINT_ID}
+  bucket: ${VISION_BUCKET}
+  credentials-path: ${GOOGLE_APPLICATION_CREDENTIALS}
