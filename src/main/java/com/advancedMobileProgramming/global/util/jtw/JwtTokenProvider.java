@@ -22,6 +22,9 @@ public class JwtTokenProvider {
     @Value("${jwt.access-exp-min:120}")
     private long expMin;
 
+    @Value("${jwt.refresh-exp-min:10080}") // 7일 (7*24*60)
+    private long refreshExpMin;
+
     private SecretKey key; // 0.12.x에서는 SecretKey로 두는 게 편함
 
     @PostConstruct
@@ -42,6 +45,19 @@ public class JwtTokenProvider {
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(exp))
                 // 0.12.x: 알고리즘을 명시하려면 Jwts.SIG.HS256 사용
+                .signWith(key, Jwts.SIG.HS256)
+                .compact();
+    }
+
+    public String createRefreshToken(Long userId, String role) {
+        Instant now = Instant.now();
+        Instant exp = now.plusSeconds(refreshExpMin * 60);
+
+        return Jwts.builder()
+                .subject(String.valueOf(userId))
+                .claim("role", role)
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(exp))
                 .signWith(key, Jwts.SIG.HS256)
                 .compact();
     }

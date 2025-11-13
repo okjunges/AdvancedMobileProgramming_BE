@@ -39,9 +39,19 @@ public class UserRestController {
 
     // 로그아웃
     @PostMapping("/logout")
-    public BaseResponse<Void> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
+    public BaseResponse<Void> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String refreshAuthorization) {
         String token = authorization.substring(7);
-        userService.logout(token);
+        String refreshToken = refreshAuthorization.substring(7);
+        userService.logout(token, refreshToken);
         return BaseResponse.onSuccess(SuccessStatus.USER_LOGOUT_SUCCESS, null);
+    }
+
+    // 토큰 재발급
+    @PostMapping("/refresh")
+    public BaseResponse<String> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String refreshAuthorization) {
+        String refreshToken = refreshAuthorization.substring(7);
+        String token = userService.refresh(refreshToken);
+        return BaseResponse.onSuccess(SuccessStatus.USER_REFRESH_TOKEN, token);
     }
 }

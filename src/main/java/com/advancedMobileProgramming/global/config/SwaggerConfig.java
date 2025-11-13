@@ -24,9 +24,16 @@ public class SwaggerConfig {
 
         // JWT 인증 방식 설정
         String jwtSchemeName = "jwtAuth";
+        String refreshSchemeName = "refreshAuth";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
         Components components = new Components()
                 .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
+                        .name("Authorization")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")
+                        .in(SecurityScheme.In.HEADER))
+                .addSecuritySchemes(refreshSchemeName, new SecurityScheme()
                         .name("Authorization")
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")

@@ -35,6 +35,7 @@ public class UserDtos {
     @AllArgsConstructor
     public static class LoginResponseDto {
         private String accessToken;
+        private String refreshToken;
         private String tokenType; // "Bearer"
         private ProfileResponse me;
     }
