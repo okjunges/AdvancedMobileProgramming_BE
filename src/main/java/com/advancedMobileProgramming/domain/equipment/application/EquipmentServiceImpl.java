@@ -44,8 +44,8 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public EquipmentDtos.EquipmentAddResponseDto addEquipment(Long userId, EquipmentDtos.EquipmentAddRequestDto req,
-                                                              MultipartFile mainImage, List<MultipartFile> images) throws IOException {
+    public EquipmentDtos.EquipmentResponseDto addEquipment(Long userId, EquipmentDtos.EquipmentAddRequestDto req,
+                                                           MultipartFile mainImage, List<MultipartFile> images) throws IOException {
         // 관리자인지 먼저 확인
         checkAdminRole(userId);
 
@@ -83,5 +83,32 @@ public class EquipmentServiceImpl implements EquipmentService {
             visionWarehouseService.appendImagesToProduct(visionCode, images);
         }
         else throw new CannotAddImageVision();
+    }
+
+    @Override
+    public EquipmentDtos.EquipmentResponseDto modifyEquipment(Long userId, Long equipmentId, EquipmentDtos.EquipmentModifyRequestDto req) {
+        // 관리자인지 먼저 확인
+        checkAdminRole(userId);
+        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(NotExistedEquipmentException::new);
+        if (req.getModelName() != null) equipment.setModelName(req.getModelName());
+        if (req.getName() != null) equipment.setName(req.getName());
+        if (req.getCategoryId() != null) {
+            Category category = categoryRepository.findById(req.getCategoryId()).orElseThrow(CategoryNotExistException::new);
+            equipment.setCategory(category);
+        }
+        if (req.getManufacturer() != null) equipment.setManufacturer(req.getManufacturer());
+        if (req.getPurchaseYear() != null) equipment.setPurchaseYear(req.getPurchaseYear());
+        if (req.getLocation() != null) equipment.setLocation(req.getLocation());
+        if (req.getUse() != null) equipment.setUse(req.getUse());
+        if (req.getRemainNum() != null) equipment.setRemainNum(req.getRemainNum());
+        return EquipmentConverter.toEquipmentAddResponseDto(equipment);
+    }
+
+    @Override
+    public void deleteEquipment(Long userId, Long equipmentId) {
+        // 관리자인지 먼저 확인
+        checkAdminRole(userId);
+        Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(NotExistedEquipmentException::new);
+        equipmentRepository.delete(equipment);
     }
 }
