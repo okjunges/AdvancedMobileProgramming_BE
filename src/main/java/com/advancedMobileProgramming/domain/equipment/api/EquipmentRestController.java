@@ -53,4 +53,11 @@ public class EquipmentRestController {
         equipmentService.deleteEquipment(userId, equipmentId);
         return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_DELETE_SUCCESS, null);
     }
+
+    @PostMapping(value ="/scan", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public BaseResponse<EquipmentDtos.EquipmentScanResponseDto> scanEquipment(@AuthenticationPrincipal Long userId,
+                                                                              @RequestPart(value = "images") MultipartFile image)  throws IOException {
+        EquipmentDtos.EquipmentScanResponseDto result = equipmentService.scan(userId, image);
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_SCAN_SUCCESS, result);
+    }
 }

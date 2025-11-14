@@ -7,6 +7,7 @@ public class EquipmentConverter {
 
     public static EquipmentDtos.EquipmentResponseDto toEquipmentAddResponseDto(Equipment equipment) {
         return EquipmentDtos.EquipmentResponseDto.builder()
+                .equipmentId(equipment.getEquipmentId())
                 .modelName(equipment.getModelName())
                 .name(equipment.getName())
                 .categoryName(equipment.getCategory().getName())

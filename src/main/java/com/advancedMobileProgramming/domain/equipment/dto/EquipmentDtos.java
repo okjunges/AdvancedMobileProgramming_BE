@@ -15,6 +15,7 @@ public class EquipmentDtos {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EquipmentResponseDto {
+        Long equipmentId;
         String visionCode;
         String modelName;
         String name;
@@ -59,6 +60,16 @@ public class EquipmentDtos {
         String location;
         String use;
         Integer remainNum;
+    }
+
+    // --- 기자재 스캔 응답 ---
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EquipmentScanResponseDto {
+        Double score;
+        EquipmentResponseDto equipment;
     }
 
 }

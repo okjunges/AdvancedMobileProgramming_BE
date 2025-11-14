@@ -28,6 +28,7 @@ public enum SuccessStatus implements BaseCode {
     EQUIPMENT_ADD_IMAGE_SUCCESS(HttpStatus.OK, "EQUIPMENT_203", "기자재 이미지 데이터 추가에 성공했습니다."),
     EQUIPMENT_MODIFY_SUCCESS(HttpStatus.OK, "EQUIPMENT_204", "기자재 수정 성공했습니다."),
     EQUIPMENT_DELETE_SUCCESS(HttpStatus.OK, "EQUIPMENT_205", "기자재 삭제 성공했습니다."),
+    EQUIPMENT_SCAN_SUCCESS(HttpStatus.OK, "EQUIPMENT_206", "기자재 스캔 성공했습니다."),
 
 
     ;

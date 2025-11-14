@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
     Optional<Equipment> findByName(String name);
 
+    Optional<Equipment> findByVisionCode(String visionCode);
+
     boolean existsEquipmentByName(String name);
 
     boolean existsEquipmentByVisionCode(String visionCode);
