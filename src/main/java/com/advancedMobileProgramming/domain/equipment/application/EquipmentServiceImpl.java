@@ -6,10 +6,7 @@ import com.advancedMobileProgramming.domain.category.repository.CategoryReposito
 import com.advancedMobileProgramming.domain.equipment.converter.EquipmentConverter;
 import com.advancedMobileProgramming.domain.equipment.dto.EquipmentDtos;
 import com.advancedMobileProgramming.domain.equipment.entity.Equipment;
-import com.advancedMobileProgramming.domain.equipment.exception.CannotAddImageVision;
-import com.advancedMobileProgramming.domain.equipment.exception.ExistedEquipmentException;
-import com.advancedMobileProgramming.domain.equipment.exception.NotExistedEquipmentException;
-import com.advancedMobileProgramming.domain.equipment.exception.UnkownMainEquipmentImage;
+import com.advancedMobileProgramming.domain.equipment.exception.*;
 import com.advancedMobileProgramming.domain.equipment.repository.EquipmentRepository;
 import com.advancedMobileProgramming.domain.user.entity.User;
 import com.advancedMobileProgramming.domain.user.entity.enums.Role;
@@ -17,6 +14,7 @@ import com.advancedMobileProgramming.domain.user.exception.UserNotAdmin;
 import com.advancedMobileProgramming.domain.user.exception.UserNotFoundException;
 import com.advancedMobileProgramming.domain.user.repository.UserRepository;
 import com.advancedMobileProgramming.global.util.file.FileStorageService;
+import com.advancedMobileProgramming.global.util.vision.VisionDtos;
 import com.advancedMobileProgramming.global.util.vision.VisionProperties;
 import com.advancedMobileProgramming.global.util.vision.VisionWarehouseService;
 import lombok.RequiredArgsConstructor;
@@ -110,5 +108,19 @@ public class EquipmentServiceImpl implements EquipmentService {
         checkAdminRole(userId);
         Equipment equipment = equipmentRepository.findById(equipmentId).orElseThrow(NotExistedEquipmentException::new);
         equipmentRepository.delete(equipment);
+    }
+
+    @Override
+    public EquipmentDtos.EquipmentScanResponseDto scan(Long userId, MultipartFile image) throws IOException {
+        if(image == null) throw new UnkownMainEquipmentImage();
+        String contentType = image.getContentType();
+        if (contentType != null && contentType.toLowerCase().contains("heic")) throw new UnsupportedImageFormatException();
+        VisionDtos.ScanDto result = visionWarehouseService.scan(image);
+        Equipment equipment = equipmentRepository.findByVisionCode(result.getVisionCode()).orElseThrow(NotExistedEquipmentException::new);
+        EquipmentDtos.EquipmentResponseDto detail = EquipmentConverter.toEquipmentAddResponseDto(equipment);
+        return EquipmentDtos.EquipmentScanResponseDto.builder()
+                .score(result.getRelevance())
+                .equipment(detail)
+                .build();
     }
 }

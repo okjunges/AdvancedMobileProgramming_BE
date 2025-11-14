@@ -31,11 +31,13 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // --- EQUIPMENT ---
     EQUIPMENT_ALREADY_EXISTED(HttpStatus.BAD_REQUEST, "EQUIPMENT_400", "이미 등록된 기자재입니다."),
-    EQUIPMENT_UNKNOWN_IMAGE(HttpStatus.BAD_REQUEST, "EQUIPMENT_401", "기자재의 메인 이미지는 필수 입니다."),
+    EQUIPMENT_UNKNOWN_IMAGE(HttpStatus.BAD_REQUEST, "EQUIPMENT_401", "기자재의 이미지가 필수입니다."),
     EQUIPMENT_NOT_EXISTED(HttpStatus.NOT_FOUND, "EQUIPMENT_404", "기자재가 존재하지 않습니다."),
 
     // --- VISION ---
     VISION_NOT_ACCESS_YOU(HttpStatus.BAD_REQUEST, "EQUIPMENT_400", "이미지 데이터를 추가할 권한이 없습니다."),
+    VISION_SCAN_NOT_MATCH(HttpStatus.NOT_FOUND, "EQUIPMENT_404", "이미지 데이터에 맞는 기자재가 없습니다."),
+    UNSUPPORTED_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, "EQUIPMENT_401", "해당 이미지 파일은 지원하지 않는 확장자입니다. JPG/PNG로 업로드해 주세요."),
 
     ;
 
