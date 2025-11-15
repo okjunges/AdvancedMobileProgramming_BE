@@ -11,5 +11,6 @@ public interface EquipmentService {
     void addEquipmentImage(Long userId, String visionCode, List<MultipartFile> images) throws IOException;
     EquipmentDtos.EquipmentResponseDto modifyEquipment(Long userId, Long equipmentId, EquipmentDtos.EquipmentModifyRequestDto req);
     void deleteEquipment(Long userId, Long equipmentId);
-    EquipmentDtos.EquipmentScanResponseDto scan(Long userId, MultipartFile image) throws IOException;
+    EquipmentDtos.EquipmentScanResponseDto scanWithVertexAi(Long userId, MultipartFile image) throws Exception;
+    EquipmentDtos.EquipmentScanResponseDto scanWithWarehouse(Long userId, MultipartFile image) throws IOException;
 }

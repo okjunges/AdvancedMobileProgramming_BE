@@ -1,6 +1,6 @@
 package com.advancedMobileProgramming.global.util.vision;
 
-import com.advancedMobileProgramming.domain.equipment.exception.NoMatchingEquipmentException;
+import com.advancedMobileProgramming.domain.equipment.exception.NotMatchingEquipmentException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
@@ -108,7 +108,7 @@ public class VisionWarehouseService {
         Map<String, Object> root = objectMapper.readValue(json, Map.class);
         List<Map<String, Object>> items = (List<Map<String, Object>>) root.get("searchResultItems");
 
-        if (items == null || items.isEmpty()) throw new NoMatchingEquipmentException();
+        if (items == null || items.isEmpty()) throw new NotMatchingEquipmentException();
 
         // 0번째 = relevance 가장 높은 결과
         Map<String, Object> best = items.get(0);
@@ -118,7 +118,7 @@ public class VisionWarehouseService {
 
         System.out.println("relevance: " + relevance);
 
-        if (relevance < 0.8) throw new NoMatchingEquipmentException();
+        if (relevance < 0.8) throw new NotMatchingEquipmentException();
 
         String assetId = assetName.substring(assetName.lastIndexOf("/") + 1);
         String[] parts = assetId.split("-");

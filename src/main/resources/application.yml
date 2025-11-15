@@ -4,6 +4,13 @@ spring:
   profiles:
     active: local
 
+# 서버 공통 타임아웃
+server:
+  tomcat:
+    connection-timeout: 300s
+    max-http-form-post-size: 1100MB
+    max-swallow-size: -1
+
 # ========== local ==========
 ---
 spring:
@@ -18,6 +25,11 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  # 업로드 하는 파일의 최대 크기 20MB로 지정
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
 
   # jpa
   jpa:
@@ -62,3 +74,9 @@ vision:
   index-endpoint-id: ${VISION_INDEX_ENDPOINT_ID}
   bucket: ${VISION_BUCKET}
   credentials-path: ${GOOGLE_APPLICATION_CREDENTIALS}
+
+vertex-ai:
+  credentials-path: ${GOOGLE_VERTEX_AI_CREDENTIALS}
+  project-id : ${VERTEX_AI_PROJECT_ID}
+  location : us-central1
+  model : gemini-2.5-flash # 2.0 Flash/2.5 Flash 등으로 교체 가능

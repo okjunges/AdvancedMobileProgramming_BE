@@ -58,6 +58,11 @@ dependencies {
 
 	// Vertex AI Vision
 	implementation 'com.google.cloud:google-cloud-aiplatform'
+
+	// Vertex AI
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.22.0'
+	implementation 'com.google.http-client:google-http-client:1.43.3'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {

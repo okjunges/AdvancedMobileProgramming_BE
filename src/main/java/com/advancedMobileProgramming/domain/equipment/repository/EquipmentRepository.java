@@ -10,6 +10,8 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     Optional<Equipment> findByVisionCode(String visionCode);
 
+    Optional<Equipment> findByModelName(String modelName);
+
     boolean existsEquipmentByName(String name);
 
     boolean existsEquipmentByVisionCode(String visionCode);
