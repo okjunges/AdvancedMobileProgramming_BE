@@ -14,6 +14,8 @@ import com.advancedMobileProgramming.domain.user.exception.UserNotAdmin;
 import com.advancedMobileProgramming.domain.user.exception.UserNotFoundException;
 import com.advancedMobileProgramming.domain.user.repository.UserRepository;
 import com.advancedMobileProgramming.global.util.file.FileStorageService;
+import com.advancedMobileProgramming.global.util.vertexAI.VertexAiDtos;
+import com.advancedMobileProgramming.global.util.vertexAI.VertexAiService;
 import com.advancedMobileProgramming.global.util.vision.VisionDtos;
 import com.advancedMobileProgramming.global.util.vision.VisionProperties;
 import com.advancedMobileProgramming.global.util.vision.VisionWarehouseService;
@@ -35,6 +37,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     private final FileStorageService storage;
     private final VisionProperties visionProps;
     private final VisionWarehouseService visionWarehouseService;
+    private final VertexAiService vertexAiService;
 
     private void checkAdminRole(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -111,7 +114,36 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public EquipmentDtos.EquipmentScanResponseDto scan(Long userId, MultipartFile image) throws IOException {
+    public EquipmentDtos.EquipmentScanResponseDto scanWithVertexAi(Long userId, MultipartFile image) throws Exception {
+        if(image == null) throw new UnkownMainEquipmentImage();
+        // heic 확장자의 이미지인 경우 오류 가능성이 높아서 예외 처리
+        String contentType = image.getContentType();
+        if (contentType != null && contentType.toLowerCase().contains("heic")) throw new UnsupportedImageFormatException();
+        VertexAiDtos.RecognitionResult json = vertexAiService.recognize(image);
+
+        Equipment equipment = equipmentRepository.findByModelName(json.getModel())
+                .orElseThrow(NotMatchingEquipmentException::new);
+
+        if (json.getScore() < 80) throw new NotMatchingEquipmentException();
+
+        String aiCategory = json.getCategory().trim().toLowerCase();
+        String eqCategory = equipment.getCategory().getName().trim().toLowerCase();
+        if (!eqCategory.equals(aiCategory)) throw new NotMatchingEquipmentException();
+
+        String aiBran = json.getBrand().trim().toLowerCase();
+        String eqBrand = equipment.getManufacturer().trim().toLowerCase();
+        if (!eqBrand.equals(aiBran)) throw new NotMatchingEquipmentException();
+
+        EquipmentDtos.EquipmentResponseDto result = EquipmentConverter.toEquipmentAddResponseDto(equipment);
+        return EquipmentDtos.EquipmentScanResponseDto.builder()
+                .score(json.getScore())
+                .equipment(result)
+                .build();
+    }
+
+//    Vision Warehouse 로 Scan 하던 코드 현재는 해당 API 사용 불가능
+    @Override
+    public EquipmentDtos.EquipmentScanResponseDto scanWithWarehouse(Long userId, MultipartFile image) throws IOException {
         if(image == null) throw new UnkownMainEquipmentImage();
         String contentType = image.getContentType();
         if (contentType != null && contentType.toLowerCase().contains("heic")) throw new UnsupportedImageFormatException();

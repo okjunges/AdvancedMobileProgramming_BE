@@ -56,8 +56,8 @@ public class EquipmentRestController {
 
     @PostMapping(value ="/scan", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponse<EquipmentDtos.EquipmentScanResponseDto> scanEquipment(@AuthenticationPrincipal Long userId,
-                                                                              @RequestPart(value = "images") MultipartFile image)  throws IOException {
-        EquipmentDtos.EquipmentScanResponseDto result = equipmentService.scan(userId, image);
+                                                                              @RequestPart(value = "images") MultipartFile image)  throws Exception {
+        EquipmentDtos.EquipmentScanResponseDto result = equipmentService.scanWithVertexAi(userId, image);
         return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_SCAN_SUCCESS, result);
     }
 }
