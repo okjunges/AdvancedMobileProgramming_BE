@@ -60,4 +60,57 @@ public class EquipmentRestController {
         EquipmentDtos.EquipmentScanResponseDto result = equipmentService.scanWithVertexAi(userId, image);
         return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_SCAN_SUCCESS, result);
     }
+
+    @GetMapping("/popular")
+    public BaseResponse<List<EquipmentDtos.PopularEquipmentDto>> getPopularEquipments() {
+        List<EquipmentDtos.PopularEquipmentDto> result = equipmentService.getPopularEquipments();
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_POPULAR_SUCCESS, result);
+    }
+
+    @GetMapping
+    public BaseResponse<List<EquipmentDtos.EquipmentListDto>> getAllEquipments() {
+        List<EquipmentDtos.EquipmentListDto> result = equipmentService.getAllEquipments();
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_LIST_SUCCESS, result);
+    }
+
+    @GetMapping("/search")
+    public BaseResponse<List<EquipmentDtos.EquipmentListDto>> searchEquipments(
+            @RequestParam("name") String name
+    ) {
+        List<EquipmentDtos.EquipmentListDto> result = equipmentService.searchEquipmentsByName(name);
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_SEARCH_SUCCESS, result);
+    }
+
+    @GetMapping("/filter")
+    public BaseResponse<List<EquipmentDtos.EquipmentListDto>> filterEquipments(
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "status", required = false) String status
+    ) {
+        List<EquipmentDtos.EquipmentListDto> result = equipmentService.filterEquipments(categoryId, status);
+
+        SuccessStatus successStatus;
+
+        if (categoryId != null && status != null) {
+            successStatus = SuccessStatus.EQUIPMENT_FILTER_SUCCESS;
+
+        } else if (categoryId != null) {
+            successStatus = SuccessStatus.EQUIPMENT_CATEGORY_FILTER_SUCCESS;
+
+        } else if (status != null) {
+            successStatus = SuccessStatus.EQUIPMENT_RENTAL_STATUS_FILTER_SUCCESS;
+
+        } else {
+            successStatus = SuccessStatus.EQUIPMENT_LIST_SUCCESS;
+        }
+
+        return BaseResponse.onSuccess(successStatus, result);
+    }
+
+    @GetMapping("/{equipment_id}")
+    public BaseResponse<EquipmentDtos.EquipmentDetailDto> getEquipmentDetail(
+            @PathVariable("equipment_id") Long equipmentId
+    ) {
+        EquipmentDtos.EquipmentDetailDto result = equipmentService.getEquipmentDetail(equipmentId);
+        return BaseResponse.onSuccess(SuccessStatus.EQUIPMENT_DETAIL_SUCCESS, result);
+    }
 }

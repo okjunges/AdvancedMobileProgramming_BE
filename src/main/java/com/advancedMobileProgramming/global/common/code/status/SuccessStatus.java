@@ -29,8 +29,13 @@ public enum SuccessStatus implements BaseCode {
     EQUIPMENT_MODIFY_SUCCESS(HttpStatus.OK, "EQUIPMENT_204", "기자재 수정 성공했습니다."),
     EQUIPMENT_DELETE_SUCCESS(HttpStatus.OK, "EQUIPMENT_205", "기자재 삭제 성공했습니다."),
     EQUIPMENT_SCAN_SUCCESS(HttpStatus.OK, "EQUIPMENT_206", "기자재 스캔 성공했습니다."),
-
-
+    EQUIPMENT_POPULAR_SUCCESS(HttpStatus.OK, "EQUIPMENT_207", "인기 기자재 조회 성공입니다."),
+    EQUIPMENT_LIST_SUCCESS(HttpStatus.OK, "EQUIPMENT_208", "기자재 전체 목록 조회 성공입니다."),
+    EQUIPMENT_SEARCH_SUCCESS(HttpStatus.OK, "EQUIPMENT_209", "기자재 명으로 검색 성공입니다."),
+    EQUIPMENT_CATEGORY_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_310", "카테고리 필터링 성공입니다."),
+    EQUIPMENT_RENTAL_STATUS_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_311", "대여상태 필터링 성공입니다."),
+    EQUIPMENT_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_312", "카테고리 및 대여상태 필터링 성공입니다."),
+    EQUIPMENT_DETAIL_SUCCESS(HttpStatus.OK, "EQUIPMENTF_313", "기자재 상세 정보 조회 성공입니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -13,4 +13,9 @@ public interface EquipmentService {
     void deleteEquipment(Long userId, Long equipmentId);
     EquipmentDtos.EquipmentScanResponseDto scanWithVertexAi(Long userId, MultipartFile image) throws Exception;
     EquipmentDtos.EquipmentScanResponseDto scanWithWarehouse(Long userId, MultipartFile image) throws IOException;
+    List<EquipmentDtos.PopularEquipmentDto> getPopularEquipments();
+    List<EquipmentDtos.EquipmentListDto> getAllEquipments();
+    List<EquipmentDtos.EquipmentListDto> searchEquipmentsByName(String keyword);
+    List<EquipmentDtos.EquipmentListDto> filterEquipments(Long categoryId, String rentalStatus);
+    EquipmentDtos.EquipmentDetailDto getEquipmentDetail(Long equipmentId);
 }

@@ -155,4 +155,64 @@ public class EquipmentServiceImpl implements EquipmentService {
                 .equipment(detail)
                 .build();
     }
+
+    //인기 있는 기자재 4개
+    @Override
+    public List<EquipmentDtos.PopularEquipmentDto> getPopularEquipments() {
+        List<Equipment> equipments = equipmentRepository.findTop4ByOrderByRentalCntDesc();
+        return EquipmentConverter.toPopularEquipmentDtoList(equipments);
+    }
+
+    //전체 목록 조회
+    @Override
+    public List<EquipmentDtos.EquipmentListDto> getAllEquipments() {
+        List<Equipment> equipments = equipmentRepository.findAll();  // 필요하면 정렬 추가 가능
+        return EquipmentConverter.toEquipmentListDtoList(equipments);
+    }
+
+    //기자재 검색
+    @Override
+    public List<EquipmentDtos.EquipmentListDto> searchEquipmentsByName(String keyword) {
+        List<Equipment> equipments = equipmentRepository.findByNameContainingIgnoreCase(keyword);
+        return EquipmentConverter.toEquipmentListDtoList(equipments);
+    }
+
+    //카테고리 및 대여상태 필터링
+    @Override
+    public List<EquipmentDtos.EquipmentListDto> filterEquipments(Long categoryId, String rentalStatus) {
+
+        List<Equipment> equipments;
+
+        if (categoryId != null) {
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(CategoryNotExistException::new);
+            equipments = equipmentRepository.findByCategory(category);
+        } else {
+            equipments = equipmentRepository.findAll();
+        }
+
+        if (rentalStatus != null) {
+            String upper = rentalStatus.toUpperCase();
+            if (upper.equals("AVAILABLE")) {
+                equipments = equipments.stream()
+                        .filter(e -> e.getRemainNum() > 0)
+                        .toList();
+            } else if (upper.equals("UNAVAILABLE")) {
+                equipments = equipments.stream()
+                        .filter(e -> e.getRemainNum() == 0)
+                        .toList();
+            }
+        }
+
+        return EquipmentConverter.toEquipmentListDtoList(equipments);
+    }
+
+    //기자재 상세 정보 조회
+    @Override
+    public EquipmentDtos.EquipmentDetailDto getEquipmentDetail(Long equipmentId) {
+        Equipment equipment = equipmentRepository.findById(equipmentId)
+                .orElseThrow(NotExistedEquipmentException::new);
+
+        return EquipmentConverter.toEquipmentDetailDto(equipment);
+    }
 }

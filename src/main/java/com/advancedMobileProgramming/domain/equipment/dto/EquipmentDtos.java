@@ -72,4 +72,48 @@ public class EquipmentDtos {
         EquipmentResponseDto equipment;
     }
 
+    // 인기있는 기자재
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PopularEquipmentDto {
+        Long equipmentId;
+        String imageUrl;
+        String modelName;
+        String name;
+    }
+
+    // --- 기자재 전체 목록 카드용 DTO ---
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EquipmentListDto {
+        Long equipmentId;
+        String imageUrl;
+        String name;
+        String modelName;
+        String manufacturer;
+        String location;
+    }
+
+    // 기자재 상세 정보용 DTO
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EquipmentDetailDto {
+        Long equipmentId;
+        String imageUrl;
+        String name;
+        String modelName;
+        String manufacturer;
+        Integer purchaseYear;
+        String use;
+        String location;
+        Integer remainNum;
+        Boolean available;   // remainNum > 0 인지 여부
+    }
 }
+
