@@ -18,9 +18,6 @@ public class LocalFileStorageServiceImpl implements FileStorageService {
     @Value("${storage.local.base-dir}")        // 프로젝트 루트 기준
     private String baseDir;
 
-    @Value("${app.public-base-url}")
-    private String publicBaseUrl;
-
     private Path resolveBaseDir(){
         Path base = Paths.get(baseDir);
         if (!base.isAbsolute()){
@@ -47,6 +44,6 @@ public class LocalFileStorageServiceImpl implements FileStorageService {
             Files.copy(in, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         }
         // /static/** 로 노출되도록 매핑
-        return publicBaseUrl + "/static/" + dir + "/" + filename;
+        return "/static/" + dir + "/" + filename;
     }
 }

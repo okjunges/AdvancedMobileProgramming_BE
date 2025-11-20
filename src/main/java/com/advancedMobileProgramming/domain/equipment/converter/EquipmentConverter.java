@@ -2,10 +2,19 @@ package com.advancedMobileProgramming.domain.equipment.converter;
 
 import com.advancedMobileProgramming.domain.equipment.dto.EquipmentDtos;
 import com.advancedMobileProgramming.domain.equipment.entity.Equipment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class EquipmentConverter {
+    private static String publicBaseUrl;
+
+    @Value("${app.public-base-url}")
+    public void setPublicBaseUrl(String url){
+        publicBaseUrl = url;
+    }
 
     public static EquipmentDtos.EquipmentResponseDto toEquipmentAddResponseDto(Equipment equipment) {
         return EquipmentDtos.EquipmentResponseDto.builder()
@@ -18,7 +27,7 @@ public class EquipmentConverter {
                 .location(equipment.getLocation())
                 .use(equipment.getUse())
                 .remainNum(equipment.getRemainNum())
-                .imageUrl(equipment.getImageUrl())
+                .imageUrl(publicBaseUrl + equipment.getImageUrl())
                 .rentalCount(equipment.getRentalCnt())
                 .visionCode(equipment.getVisionCode())
                 .build();
@@ -27,7 +36,7 @@ public class EquipmentConverter {
     public static EquipmentDtos.PopularEquipmentDto toPopularEquipmentDto(Equipment equipment) {
         return EquipmentDtos.PopularEquipmentDto.builder()
                 .equipmentId(equipment.getEquipmentId())
-                .imageUrl(equipment.getImageUrl())
+                .imageUrl(publicBaseUrl + equipment.getImageUrl())
                 .modelName(equipment.getModelName())
                 .name(equipment.getName())
                 .build();
@@ -42,7 +51,7 @@ public class EquipmentConverter {
     public static EquipmentDtos.EquipmentListDto toEquipmentListDto(Equipment equipment) {
         return EquipmentDtos.EquipmentListDto.builder()
                 .equipmentId(equipment.getEquipmentId())
-                .imageUrl(equipment.getImageUrl())
+                .imageUrl(publicBaseUrl + equipment.getImageUrl())
                 .name(equipment.getName())
                 .modelName(equipment.getModelName())
                 .manufacturer(equipment.getManufacturer())
@@ -65,7 +74,7 @@ public class EquipmentConverter {
     public static EquipmentDtos.EquipmentDetailDto toEquipmentDetailDto(Equipment equipment) {
         return EquipmentDtos.EquipmentDetailDto.builder()
                 .equipmentId(equipment.getEquipmentId())
-                .imageUrl(equipment.getImageUrl())
+                .imageUrl(publicBaseUrl + equipment.getImageUrl())
                 .name(equipment.getName())
                 .modelName(equipment.getModelName())
                 .manufacturer(equipment.getManufacturer())

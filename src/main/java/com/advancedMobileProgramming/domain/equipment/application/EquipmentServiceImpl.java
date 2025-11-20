@@ -20,6 +20,7 @@ import com.advancedMobileProgramming.global.util.vision.VisionDtos;
 import com.advancedMobileProgramming.global.util.vision.VisionProperties;
 import com.advancedMobileProgramming.global.util.vision.VisionWarehouseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +39,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     private final VisionProperties visionProps;
     private final VisionWarehouseService visionWarehouseService;
     private final VertexAiService vertexAiService;
+
 
     private void checkAdminRole(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
