@@ -62,7 +62,7 @@ storage:
     base-dir: equipment/uploads
 
 app:
-  public-base-url: http://localhost:8080
+  public-base-url: ${BASE_URL}
 
 # Google Cloud Vision
 vision:
