@@ -32,10 +32,17 @@ public enum SuccessStatus implements BaseCode {
     EQUIPMENT_POPULAR_SUCCESS(HttpStatus.OK, "EQUIPMENT_207", "인기 기자재 조회 성공입니다."),
     EQUIPMENT_LIST_SUCCESS(HttpStatus.OK, "EQUIPMENT_208", "기자재 전체 목록 조회 성공입니다."),
     EQUIPMENT_SEARCH_SUCCESS(HttpStatus.OK, "EQUIPMENT_209", "기자재 명으로 검색 성공입니다."),
-    EQUIPMENT_CATEGORY_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_310", "카테고리 필터링 성공입니다."),
-    EQUIPMENT_RENTAL_STATUS_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_311", "대여상태 필터링 성공입니다."),
-    EQUIPMENT_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_312", "카테고리 및 대여상태 필터링 성공입니다."),
-    EQUIPMENT_DETAIL_SUCCESS(HttpStatus.OK, "EQUIPMENTF_313", "기자재 상세 정보 조회 성공입니다.")
+    EQUIPMENT_CATEGORY_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_210", "카테고리 필터링 성공입니다."),
+    EQUIPMENT_RENTAL_STATUS_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_211", "대여상태 필터링 성공입니다."),
+    EQUIPMENT_FILTER_SUCCESS(HttpStatus.OK, "EQUIPMENTF_212", "카테고리 및 대여상태 필터링 성공입니다."),
+    EQUIPMENT_DETAIL_SUCCESS(HttpStatus.OK, "EQUIPMENTF_213", "기자재 상세 정보 조회 성공입니다."),
+
+    // RENTAL
+    RENTAL_CREATE_SUCCESS(HttpStatus.OK, "RENTAL_300", "대여 생성 성공입니다."),
+    RENTAL_DETAIL_SUCCESS(HttpStatus.OK, "RENTAL_301", "대여 상세 조회 성공입니다."),
+    RENTAL_HISTORY_SUCCESS(HttpStatus.OK, "RENTAL_302", "대여 이력 조회 성공입니다."),
+    RENTAL_RETURN_LIST_SUCCESS(HttpStatus.OK, "RENTAL_303", "반납 목록 조회 성공입니다."),
+    RENTAL_RETURN_SUCCESS(HttpStatus.OK, "RENTAL_304", "반납 처리 성공입니다."),
     ;
 
     private final HttpStatus httpStatus;
