@@ -43,6 +43,9 @@ public enum SuccessStatus implements BaseCode {
     RENTAL_HISTORY_SUCCESS(HttpStatus.OK, "RENTAL_302", "대여 이력 조회 성공입니다."),
     RENTAL_RETURN_LIST_SUCCESS(HttpStatus.OK, "RENTAL_303", "반납 목록 조회 성공입니다."),
     RENTAL_RETURN_SUCCESS(HttpStatus.OK, "RENTAL_304", "반납 처리 성공입니다."),
+
+    // ALARM
+    ALARM_SUCCESS(HttpStatus.OK, "RENTAL_300", "당일 반납 알림 성공입니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -1,6 +1,6 @@
-package com.advancedMobileProgramming.domain.rental.repository;
+package com.advancedMobileProgramming.domain.rental_alarm.repository;
 
-import com.advancedMobileProgramming.domain.rental.entity.RentalDetail;
+import com.advancedMobileProgramming.domain.rental_alarm.entity.RentalDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

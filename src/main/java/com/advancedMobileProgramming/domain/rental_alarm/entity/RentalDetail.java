@@ -1,4 +1,4 @@
-package com.advancedMobileProgramming.domain.rental.entity;
+package com.advancedMobileProgramming.domain.rental_alarm.entity;
 
 import com.advancedMobileProgramming.domain.equipment.entity.Equipment;
 import com.advancedMobileProgramming.domain.model.BaseEntity;
