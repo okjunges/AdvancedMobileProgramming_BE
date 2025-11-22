@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,20 +31,19 @@ public class RentalServiceImpl implements RentalService {
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
 
-
-    //유저 조회 공통 메서드
+    // 유저 조회 공통 메서드
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    //기자재 조회 공통 메서드
+    // 기자재 조회 공통 메서드
     private Equipment getEquipment(Long equipmentId) {
         return equipmentRepository.findById(equipmentId)
                 .orElseThrow(NotExistedEquipmentException::new);
     }
 
-    //기자재 대여 메서드
+    // 기자재 대여 메서드
     @Override
     @Transactional
     public RentalDtos.RentalDetailResponseDto rentEquipment(Long userId,
@@ -63,11 +61,12 @@ public class RentalServiceImpl implements RentalService {
         // 2) 기자재 조회
         Equipment equipment = getEquipment(equipmentId);
 
-        // 3) rental_detail 생성 & 저장
+        // 3) rental_detail 생성 & 저장  (날짜만 저장)
+        LocalDate today = LocalDate.now();
         RentalDetail rentalDetail = RentalDetail.create(
                 user,
                 equipment,
-                LocalDateTime.now()
+                today
         );
         rentalDetailRepository.save(rentalDetail);
 
@@ -79,7 +78,7 @@ public class RentalServiceImpl implements RentalService {
         return RentalConverter.toRentalDetailResponseDto(rentalDetail);
     }
 
-    //기자재 반납 메서드
+    // 기자재 반납 메서드
     @Override
     @Transactional
     public RentalDtos.RentalDetailResponseDto returnEquipment(Long userId,
@@ -103,13 +102,13 @@ public class RentalServiceImpl implements RentalService {
             throw new IllegalStateException("이미 반납된 이용내역입니다.");
         }
 
-        // 5) 연체 여부 계산
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime dueDate = rentalDetail.getStartDate().plusWeeks(1); // 7일 뒤
-        boolean overdue = now.isAfter(dueDate);
+        // 5) 연체 여부 계산 (날짜 기준)
+        LocalDate today = LocalDate.now();
+        LocalDate dueDate = rentalDetail.getStartDate().plusWeeks(1); // 7일 뒤
+        boolean overdue = today.isAfter(dueDate);
 
-        // 6) rental_detail 상태 업데이트
-        rentalDetail.completeReturn(now, overdue);
+        // 6) rental_detail 상태 업데이트 (반납일도 LocalDate)
+        rentalDetail.completeReturn(today, overdue);
 
         // 7) rental 한 건만 삭제 (id 기반 1:1)
         rentalRepository.findByRentalDetail(rentalDetail)
@@ -123,7 +122,7 @@ public class RentalServiceImpl implements RentalService {
         return RentalConverter.toRentalDetailResponseDto(rentalDetail);
     }
 
-    //기자재 대여 목록 조회 메서드
+    // 기자재 대여 목록 조회 메서드 (대여 중)
     @Override
     @Transactional(readOnly = true)
     public List<RentalDtos.RentalHistoryDto> getRentalHistory(Long userId) {
@@ -136,12 +135,11 @@ public class RentalServiceImpl implements RentalService {
         return RentalConverter.toRentalHistoryDtoList(details);
     }
 
-    //기자재 반납 목록 조회 메서드
+    // 기자재 반납 목록 조회 메서드
     @Override
     @Transactional(readOnly = true)
     public List<RentalDtos.RentalHistoryDto> getReturnedHistory(Long userId) {
 
-        // (선택) 유저 검증
         User user = getUser(userId);
 
         List<RentalDetail> details =
@@ -150,42 +148,46 @@ public class RentalServiceImpl implements RentalService {
         return RentalConverter.toRentalHistoryDtoList(details);
     }
 
-    //기자재 상세 정보 메서드
+    // 기자재 상세 정보 메서드
     @Override
     @Transactional(readOnly = true)
     public RentalDtos.RentalInfoResponseDto getRentalInfo(Long userId,
                                                           Long rentalDetailId) {
 
-        // 1) 로그인 유저 확인
         User user = getUser(userId);
 
-        // 2) rental_detail 조회
         RentalDetail rentalDetail = rentalDetailRepository.findById(rentalDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 대여 내역입니다."));
 
-        // 3) 본인 건인지 체크 (보안)
         if (!rentalDetail.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("본인의 대여 내역만 조회할 수 있습니다.");
         }
 
-        // 4) DTO 변환
         return RentalConverter.toRentalInfoResponseDto(rentalDetail);
     }
 
+    // 반납일 알림
     @Override
     public RentalDtos.RentalAlarmResponseDto getRentalAlarm(Long userId) {
         User user = getUser(userId);
         List<Rental> rentals = rentalRepository.findAllByUserId(userId);
+
         List<RentalDetail> alarmList = new ArrayList<>();
+
         for (Rental rental : rentals) {
             RentalDetail rentalDetail = rental.getRentalDetail();
-            // 로컬로만 진행할 프로젝트여서 OS가 한국 시간 기준이어서 지역 시간 문제 없음
-            LocalDate dueTo = rentalDetail.getStartDate().toLocalDate();
-            if (dueTo.plusWeeks(1).isEqual(LocalDate.now()) && !rental.getAlarm()) {
+
+            // startDate 자체가 LocalDate 이므로 그대로 사용
+            LocalDate startDate = rentalDetail.getStartDate();
+            LocalDate dueDate = startDate.plusWeeks(1);
+
+            // 오늘 날짜와 “반납 예정일이 같은 날” 이고, 아직 알림 안 보낸 건만
+            if (dueDate.isEqual(LocalDate.now()) && !Boolean.TRUE.equals(rental.getAlarm())) {
                 alarmList.add(rentalDetail);
-                rental.setAlarm(true);
+                rental.setAlarm(true);   // 알림 보냈다고 표시
             }
         }
+
         return RentalConverter.toRentalAlarmResponseDto(alarmList);
     }
 }

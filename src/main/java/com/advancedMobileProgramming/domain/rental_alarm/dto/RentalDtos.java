@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -34,8 +34,8 @@ public class RentalDtos {
         private Long rentalDetailId;
         private Long userId;
         private Long equipmentId;
-        private LocalDateTime startDate;
-        private LocalDateTime returnDate;   // 대여 직후에는 보통 null
+        private LocalDate startDate;
+        private LocalDate returnDate;   // 대여 직후에는 보통 null
         private Boolean returnStatus;       // 대여 직후에는 false
         private Boolean overdue;            // 대여 직후에는 false
     }
@@ -67,7 +67,7 @@ public class RentalDtos {
         private String modelName;   // equipment.modelName
 
         // 반납 예정일 (start_date + 7일)
-        private LocalDateTime dueAt;
+        private LocalDate dueAt;
     }
 
     @Getter
@@ -89,9 +89,9 @@ public class RentalDtos {
         private String location;
 
         // 대여/반납 관련
-        private LocalDateTime startDate;   // 시작일
-        private LocalDateTime dueAt;       // 마감 예정일 (startDate + 7일)
-        private LocalDateTime returnDate;  // 실제 반납 시각 (반납 전이면 null)
+        private LocalDate startDate;   // 시작일
+        private LocalDate dueAt;       // 마감 예정일 (startDate + 7일)
+        private LocalDate returnDate;  // 실제 반납 시각 (반납 전이면 null)
         private Boolean returnStatus;      // 반납 여부
         private Boolean overdue;           // 연체 여부
     }
