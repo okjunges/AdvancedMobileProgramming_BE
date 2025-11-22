@@ -1,7 +1,7 @@
-package com.advancedMobileProgramming.domain.rental.api;
+package com.advancedMobileProgramming.domain.rental_alarm.api;
 
-import com.advancedMobileProgramming.domain.rental.application.RentalService;
-import com.advancedMobileProgramming.domain.rental.dto.RentalDtos;
+import com.advancedMobileProgramming.domain.rental_alarm.application.RentalService;
+import com.advancedMobileProgramming.domain.rental_alarm.dto.RentalDtos;
 import com.advancedMobileProgramming.global.common.code.status.SuccessStatus;
 import com.advancedMobileProgramming.global.common.response.BaseResponse;
 import jakarta.validation.Valid;

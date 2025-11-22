@@ -1,6 +1,6 @@
-package com.advancedMobileProgramming.domain.rental.application;
+package com.advancedMobileProgramming.domain.rental_alarm.application;
 
-import com.advancedMobileProgramming.domain.rental.dto.RentalDtos;
+import com.advancedMobileProgramming.domain.rental_alarm.dto.RentalDtos;
 
 import java.util.List;
 
@@ -19,4 +19,5 @@ public interface RentalService {
 
     RentalDtos.RentalInfoResponseDto getRentalInfo(Long userId,
                                                    Long rentalDetailId);
+    RentalDtos.RentalAlarmResponseDto getRentalAlarm(Long userId);
 }

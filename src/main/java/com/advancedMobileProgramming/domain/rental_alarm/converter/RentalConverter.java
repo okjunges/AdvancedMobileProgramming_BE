@@ -1,8 +1,7 @@
-package com.advancedMobileProgramming.domain.rental.converter;
+package com.advancedMobileProgramming.domain.rental_alarm.converter;
 
-import com.advancedMobileProgramming.domain.rental.dto.RentalDtos;
-import com.advancedMobileProgramming.domain.rental.entity.Rental;
-import com.advancedMobileProgramming.domain.rental.entity.RentalDetail;
+import com.advancedMobileProgramming.domain.rental_alarm.dto.RentalDtos;
+import com.advancedMobileProgramming.domain.rental_alarm.entity.RentalDetail;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -78,4 +77,20 @@ public class RentalConverter {
                 .build();
     }
 
+    public static RentalDtos.Alarm toRentalAlarmDto(RentalDetail rentalDetail) {
+        return RentalDtos.Alarm.builder()
+                .name(rentalDetail.getEquipment().getModelName())
+                .build();
+    }
+
+    public static RentalDtos.RentalAlarmResponseDto toRentalAlarmResponseDto(List<RentalDetail> rentalDetails) {
+        List<RentalDtos.Alarm> alarms = rentalDetails.stream()
+                .map(RentalConverter::toRentalAlarmDto)
+                .toList();
+
+        return RentalDtos.RentalAlarmResponseDto.builder()
+                .num(rentalDetails.size())
+                .alarms(alarms)
+                .build();
+    }
 }

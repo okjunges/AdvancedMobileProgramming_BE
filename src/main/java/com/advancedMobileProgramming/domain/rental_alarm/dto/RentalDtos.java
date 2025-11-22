@@ -1,4 +1,4 @@
-package com.advancedMobileProgramming.domain.rental.dto;
+package com.advancedMobileProgramming.domain.rental_alarm.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 대여(rental) 관련 DTO 모음 클래스
@@ -93,5 +94,22 @@ public class RentalDtos {
         private LocalDateTime returnDate;  // 실제 반납 시각 (반납 전이면 null)
         private Boolean returnStatus;      // 반납 여부
         private Boolean overdue;           // 연체 여부
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Alarm{
+        private String name;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class RentalAlarmResponseDto {
+        private int num;
+        private List<Alarm> alarms;
     }
 }

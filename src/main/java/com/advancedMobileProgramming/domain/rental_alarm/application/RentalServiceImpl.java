@@ -1,15 +1,15 @@
-package com.advancedMobileProgramming.domain.rental.application;
+package com.advancedMobileProgramming.domain.rental_alarm.application;
 
 import com.advancedMobileProgramming.domain.equipment.entity.Equipment;
 import com.advancedMobileProgramming.domain.equipment.exception.InsufficientStockException;
 import com.advancedMobileProgramming.domain.equipment.exception.NotExistedEquipmentException;
 import com.advancedMobileProgramming.domain.equipment.repository.EquipmentRepository;
-import com.advancedMobileProgramming.domain.rental.converter.RentalConverter;
-import com.advancedMobileProgramming.domain.rental.dto.RentalDtos;
-import com.advancedMobileProgramming.domain.rental.entity.Rental;
-import com.advancedMobileProgramming.domain.rental.entity.RentalDetail;
-import com.advancedMobileProgramming.domain.rental.repository.RentalDetailRepository;
-import com.advancedMobileProgramming.domain.rental.repository.RentalRepository;
+import com.advancedMobileProgramming.domain.rental_alarm.converter.RentalConverter;
+import com.advancedMobileProgramming.domain.rental_alarm.dto.RentalDtos;
+import com.advancedMobileProgramming.domain.rental_alarm.entity.Rental;
+import com.advancedMobileProgramming.domain.rental_alarm.entity.RentalDetail;
+import com.advancedMobileProgramming.domain.rental_alarm.repository.RentalDetailRepository;
+import com.advancedMobileProgramming.domain.rental_alarm.repository.RentalRepository;
 import com.advancedMobileProgramming.domain.user.entity.User;
 import com.advancedMobileProgramming.domain.user.exception.UserNotFoundException;
 import com.advancedMobileProgramming.domain.user.repository.UserRepository;
@@ -17,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -168,5 +170,22 @@ public class RentalServiceImpl implements RentalService {
 
         // 4) DTO 변환
         return RentalConverter.toRentalInfoResponseDto(rentalDetail);
+    }
+
+    @Override
+    public RentalDtos.RentalAlarmResponseDto getRentalAlarm(Long userId) {
+        User user = getUser(userId);
+        List<Rental> rentals = rentalRepository.findAllByUserId(userId);
+        List<RentalDetail> alarmList = new ArrayList<>();
+        for (Rental rental : rentals) {
+            RentalDetail rentalDetail = rental.getRentalDetail();
+            // 로컬로만 진행할 프로젝트여서 OS가 한국 시간 기준이어서 지역 시간 문제 없음
+            LocalDate dueTo = rentalDetail.getStartDate().toLocalDate();
+            if (dueTo.plusWeeks(1).isEqual(LocalDate.now()) && !rental.getAlarm()) {
+                alarmList.add(rentalDetail);
+                rental.setAlarm(true);
+            }
+        }
+        return RentalConverter.toRentalAlarmResponseDto(alarmList);
     }
 }
