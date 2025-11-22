@@ -4,37 +4,31 @@ import com.advancedMobileProgramming.domain.rental_alarm.dto.RentalDtos;
 import com.advancedMobileProgramming.domain.rental_alarm.entity.RentalDetail;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Rental 관련 엔티티 ↔ DTO 변환 담당
- * (현재는 DTO 필드가 정해지지 않아 builder().build()만 호출)
- */
 @Component
 public class RentalConverter {
 
+    // 대여 생성/반납 공통 응답 DTO
     public static RentalDtos.RentalDetailResponseDto toRentalDetailResponseDto(RentalDetail rentalDetail) {
 
         return RentalDtos.RentalDetailResponseDto.builder()
-                // 엔티티의 PK (rental_id) → DTO의 rentalDetailId
                 .rentalDetailId(rentalDetail.getRentalId())
-
-                // 연관된 User, Equipment의 PK만 꺼내서 담기
                 .userId(rentalDetail.getUser().getId())
                 .equipmentId(rentalDetail.getEquipment().getEquipmentId())
-
-                // 날짜 / 상태 정보 그대로 매핑
-                .startDate(rentalDetail.getStartDate())
-                .returnDate(rentalDetail.getReturnDate())
+                .startDate(rentalDetail.getStartDate())      // LocalDate 그대로
+                .returnDate(rentalDetail.getReturnDate())    // LocalDate 그대로 (null 가능)
                 .returnStatus(rentalDetail.getReturnStatus())
                 .overdue(rentalDetail.getOverdue())
                 .build();
     }
 
+    // “대여 중 / 반납 목록” 카드용 DTO
     public static RentalDtos.RentalHistoryDto toRentalHistoryDto(RentalDetail rentalDetail) {
 
-        LocalDateTime dueAt = rentalDetail.getStartDate().plusWeeks(1);
+        // startDate 가 이미 LocalDate 이므로 toLocalDate() 필요 없음
+        LocalDate dueAt = rentalDetail.getStartDate().plusWeeks(1);
 
         return RentalDtos.RentalHistoryDto.builder()
                 .rentalDetailId(rentalDetail.getRentalId())
@@ -51,15 +45,14 @@ public class RentalConverter {
                 .toList();
     }
 
+    // 대여 상세 조회 DTO
     public static RentalDtos.RentalInfoResponseDto toRentalInfoResponseDto(RentalDetail rentalDetail) {
 
-        // 7일 뒤 마감 예정일
-        LocalDateTime dueAt = rentalDetail.getStartDate().plusWeeks(1);
+        LocalDate dueAt = rentalDetail.getStartDate().plusWeeks(1);
 
         return RentalDtos.RentalInfoResponseDto.builder()
                 .rentalDetailId(rentalDetail.getRentalId())
 
-                // 기자재 정보
                 .imageUrl(rentalDetail.getEquipment().getImageUrl())
                 .name(rentalDetail.getEquipment().getName())
                 .modelName(rentalDetail.getEquipment().getModelName())
@@ -68,15 +61,15 @@ public class RentalConverter {
                 .use(rentalDetail.getEquipment().getUse())
                 .location(rentalDetail.getEquipment().getLocation())
 
-                // 대여/반납 관련
-                .startDate(rentalDetail.getStartDate())
-                .dueAt(dueAt)
-                .returnDate(rentalDetail.getReturnDate())
+                .startDate(rentalDetail.getStartDate())       // LocalDate
+                .dueAt(dueAt)                                 // LocalDate
+                .returnDate(rentalDetail.getReturnDate())     // LocalDate (null 가능)
                 .returnStatus(rentalDetail.getReturnStatus())
                 .overdue(rentalDetail.getOverdue())
                 .build();
     }
 
+    // 알림용 DTO
     public static RentalDtos.Alarm toRentalAlarmDto(RentalDetail rentalDetail) {
         return RentalDtos.Alarm.builder()
                 .name(rentalDetail.getEquipment().getModelName())

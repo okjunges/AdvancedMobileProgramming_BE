@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -36,17 +36,11 @@ public class RentalDetail extends BaseEntity {
 
     // 시작일 (NOT NULL)
     @Column(name = "start_date", nullable = false)
-    private LocalDateTime startDate;
-
-    /*
-    // 대여분류 (enum) – 실제 DB는 enum이지만, 도메인 enum 정해지기 전이라 String으로 매핑
-    @Column(name = "type", nullable = false)
-    private String type;
-    */
+    private LocalDate startDate;
 
     // 반납일시 (NULL 허용)
     @Column(name = "return_date")
-    private LocalDateTime returnDate;
+    private LocalDate returnDate;
 
     // 반납상태 (bool, 기본 false)
     @Column(name = "return_status")
@@ -60,9 +54,8 @@ public class RentalDetail extends BaseEntity {
     public RentalDetail(Long rentalId,
                         User user,
                         Equipment equipment,
-                        LocalDateTime startDate,
-                        //String type,
-                        LocalDateTime returnDate,
+                        LocalDate startDate,
+                        LocalDate returnDate,
                         Boolean returnStatus,
                         Boolean overdue) {
         this.rentalId = rentalId;
@@ -82,7 +75,7 @@ public class RentalDetail extends BaseEntity {
      */
     public static RentalDetail create(User user,
                                       Equipment equipment,
-                                      LocalDateTime startDate) {
+                                      LocalDate startDate) {
         return RentalDetail.builder()
                 .user(user)
                 .equipment(equipment)
@@ -94,7 +87,7 @@ public class RentalDetail extends BaseEntity {
     }
 
     // 실제 반납할 때 호출
-    public void completeReturn(LocalDateTime returnDate, boolean overdue) {
+    public void completeReturn(LocalDate returnDate, boolean overdue) {
         this.returnDate = returnDate;   // 실제 반납시각
         this.returnStatus = true;
         this.overdue = overdue;
