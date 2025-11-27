@@ -30,11 +30,14 @@ public class RentalConverter {
         // startDate 가 이미 LocalDate 이므로 toLocalDate() 필요 없음
         LocalDate dueAt = rentalDetail.getStartDate().plusWeeks(1);
 
+        Boolean overDue = dueAt.isBefore(LocalDate.now());
+
         return RentalDtos.RentalHistoryDto.builder()
                 .rentalDetailId(rentalDetail.getRentalId())
                 .imageUrl(rentalDetail.getEquipment().getImageUrl())
                 .name(rentalDetail.getEquipment().getName())
                 .modelName(rentalDetail.getEquipment().getModelName())
+                .overDue(overDue)
                 .dueAt(dueAt)
                 .build();
     }

@@ -65,6 +65,7 @@ public class RentalDtos {
         private String imageUrl;    // equipment.imageUrl
         private String name;        // equipment.name
         private String modelName;   // equipment.modelName
+        private Boolean overDue;
 
         // 반납 예정일 (start_date + 7일)
         private LocalDate dueAt;
